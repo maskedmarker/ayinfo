@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.cjh.ayinfo.entity.AyinfoUser">
+	<resultMap type="org.cjh.ayinfo.entity.AyinfoUser" id="UserResultMap">
+		<result column="USER_ID" property="userId" />
+		<result column="USER_NAME" property="userName" />
+		<result column="PASSWORD" property="password" />
+	</resultMap>
+
+	<select id="getById" parameterType="string" resultMap="UserResultMap">
+	 select * from user where userId = #{userId}
+	</select>
+	
+	<select id="getList" parameterType="org.cjh.ayinfo.entity.AyinfoUser" resultMap="UserResultMap">
+		select * from user
+		<where>
+		    <if test="userId != null">and userId = #{userId}</if>
+		    <if test="userName != null">and userName = #{userName}</if>
+		</where>
+	</select>
+</mapper>

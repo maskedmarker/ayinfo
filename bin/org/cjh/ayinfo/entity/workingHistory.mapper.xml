@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.cjh.ayinfo.entity.WorkingHistory">
+	<resultMap type="org.cjh.ayinfo.entity.WorkingHistory" id="WorkingHistoryMap">
+		<result column="EMPLOYEE_ID" property="employeeId" />
+		<result column="DES" property="des" />
+		<result column="START_DATE" property="startDate" />
+		<result column="END_DATE" property="endDate" />
+		<result column="ADDED_DATE" property="addedDate" />
+		<result column="ADDED_BY" property="addedBy" />
+		<result column="UPDATED_DATE" property="updatedDate" />
+		<result column="UPDATED_BY" property="updatedBy" />
+	</resultMap>
+  
+  <select id="getById" parameterType="java.lang.Integer" resultMap="WorkingHistoryMap">
+      select * from working_history where employee_id = #{employeeId,jdbcType=INTEGER} order by start_date 
+  </select>
+  
+  <insert id="add" parameterType="org.cjh.ayinfo.entity.WorkingHistory">
+    insert into working_history
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="employeeId != null">
+        employee_id,
+      </if>
+      <if test="des != null">
+        des,
+      </if>
+      <if test="startDate != null">
+        start_date,
+      </if>
+      <if test="endDate != null">
+        end_date,
+      </if>
+      <if test="addedDate != null">
+        added_date,
+      </if>
+      <if test="addedBy != null">
+        added_by,
+      </if>
+      <if test="updatedDate != null">
+        updated_date,
+      </if>
+      <if test="updatedBy != null">
+        updated_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="employeeId != null">
+        #{employeeId,jdbcType=INTEGER},
+      </if>
+      <if test="des != null">
+        #{des,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null">
+        #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null">
+        #{endDate,jdbcType=DATE},
+      </if>
+      <if test="addedDate != null">
+        #{addedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="addedBy != null">
+        #{addedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="delete" parameterType="java.lang.Integer">
+      delete from working_history where employee_id = #{employeeId,jdbcType=INTEGER}
+  </update>
+    
+  <update id="update" parameterType="org.cjh.ayinfo.entity.WorkingHistory">
+    update working_history set 
+      des = #{des,jdbcType=VARCHAR},
+      start_date = #{startDate,jdbcType=DATE},
+      end_date = #{endDate,jdbcType=DATE},
+      added_date = #{addedDate,jdbcType=TIMESTAMP},
+      added_by = #{addedBy,jdbcType=VARCHAR},
+      updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+      updated_by = #{updatedBy,jdbcType=VARCHAR}
+    where employee_id = #{employeeId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>员工信息查询</title>
+    <link rel="stylesheet" type="text/css" href="../styles/demo.css">
+    <link rel="stylesheet" type="text/css" href="../libs/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../libs/easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="../libs/easyui/themes/color.css">
+    <script type="text/javascript" src="../libs/jquery/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="../libs/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../libs/easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../scripts/queryEmployee.js"></script>
+</head>
+<body class="easyui-layout">
+    <div data-options="region:'center'" style="height:80%;" data-options="fit:false">
+	    <div class="easyui-panel" fit="true">
+		    <table id="dg"></table>
+	    </div>
+    </div>
+    <div id="queryCriteriaWindow" class="easyui-window" title="查询窗口" style="width:1000px;height:600px;display:none"
+        data-options="iconCls:'icon-search',modal:true,closed:true,minimizable:false,collapsible:false,resizable:false">
+        <div class="easyui-layout" data-options="fit:true">
+            <div data-options="region:'center'" style="padding:10px;">
+			    <div class="easyui-panel" data-options="fit:true,border:false">
+			        <div style="margin:10px;width:45%;border:10px;float:left">
+			            <input id="employeeName" class="easyui-textbox" label="姓名:" labelPosition="left" labelAlign="left" style="width:82%;">
+			        </div>
+			        <div style="margin:10px;width:45%;border:10px;float:left">
+						<select id="gender" class="easyui-combobox" name="gender" label="性别:" labelPosition="left" labelAlign="left" style="width:82%;"
+						    data-options="panelHeight:'auto'">
+			                <option value="男">男</option>
+			                <option value="女">女</option>
+			            </select>
+			        </div>
+			        <div style="margin:10px;width:45%;border:10px;float:left">
+		        		<label class="textbox-label textbox-label-left" style="text-align:left;">年龄:</label>
+			            <input id="ageMin" class="easyui-numberspinner" data-options="increment:1,prompt:'最低'" style="width:30%;">
+			            <em><b> - </b></em>
+			            <input id="ageMax" class="easyui-numberspinner" data-options="increment:1,prompt:'最高'" style="width:30%;">
+		            </div>
+			        <div style="margin:10px;width:45%;border:10px;float:left">
+						<select id="province" class="easyui-combobox" name="province" label="户籍:" labelPosition="left" labelAlign="left" style="width:82%;"
+						    data-options="panelMaxHeight:400">
+							<option value="北京市">北京市</option>
+							<option value="天津市">天津市</option>
+							<option value="河北省">河北省</option>
+							<option value="山西省">山西省</option>
+							<option value="内蒙古自治区">内蒙古自治区</option>
+							<option value="辽宁省">辽宁省</option>
+							<option value="吉林省">吉林省</option>
+							<option value="黑龙江省">黑龙江省</option>
+							<option value="上海市">上海市</option>
+							<option value="江苏省">江苏省</option>
+							<option value="浙江省">浙江省</option>
+							<option value="安徽省">安徽省</option>
+							<option value="福建省">福建省</option>
+							<option value="江西省">江西省</option>
+							<option value="山东省">山东省</option>
+							<option value="河南省">河南省</option>
+							<option value="湖北省">湖北省</option>
+							<option value="湖南省">湖南省</option>
+							<option value="广东省">广东省</option>
+							<option value="广西壮族自治区">广西壮族自治区</option>
+							<option value="海南省">海南省</option>
+							<option value="四川省">四川省</option>
+							<option value="贵州省">贵州省</option>
+							<option value="云南省">云南省</option>
+							<option value="重庆市">重庆市</option>
+							<option value="西藏自治区">西藏自治区</option>
+							<option value="陕西省">陕西省</option>
+							<option value="甘肃省">甘肃省</option>
+							<option value="青海省">青海省</option>
+							<option value="宁夏回族自治区">宁夏回族自治区</option>
+							<option value="新疆维吾尔自治区">新疆维吾尔自治区</option>
+							<option value="香港特别行政区">香港特别行政区</option>
+							<option value="澳门特别行政区">澳门特别行政区</option>
+							<option value="台湾省">台湾省</option>
+			            </select>
+			        </div>
+			        <div style="margin:10px;width:45%;border:10px;float:left">
+			            <input id="idNo" class="easyui-textbox" label="身份证号码:" labelPosition="left" labelAlign="left" style="width:82%;">
+			        </div>
+			        <div style="margin:10px;width:45%;border:10px;float:left">
+						<select id="zodiac" class="easyui-combobox" name="province" label="属相:" labelPosition="left" labelAlign="left" style="width:82%;"
+						    data-options="panelMinWidth:40">
+							<option value="鼠">鼠</option>
+							<option value="牛">牛</option>
+							<option value="虎">虎</option>
+							<option value="兔">兔</option>
+							<option value="龙">龙</option>
+							<option value="蛇">蛇</option>
+							<option value="马">马</option>
+							<option value="羊">羊</option>
+							<option value="猴">猴</option>
+							<option value="鸡">鸡</option>
+							<option value="狗">狗</option>
+							<option value="猪">猪</option>
+			            </select>
+			        </div>
+			        <div style="margin:10px;width:45%;border:10px;float:left">
+			        	<label class="textbox-label textbox-label-left" style="text-align:left;">身高:</label>
+			            <input id="heightMin" class="easyui-numberspinner" data-options="increment:1,prompt:'最低'" style="width:30%;">
+			            <em><b> - </b></em>
+			            <input id="heightMax" class="easyui-numberspinner" data-options="increment:1,prompt:'最高'" style="width:30%;">
+		            </div>
+			        <div style="margin:10px;width:45%;border:10px;float:left">
+			        	<label class="textbox-label textbox-label-left" style="text-align:left;">体重:</label>
+			            <input id="weightMin" class="easyui-numberspinner" data-options="increment:1,prompt:'最低'" style="width:30%;">
+			            <em><b> - </b></em>
+			            <input id="weightMax" class="easyui-numberspinner" data-options="increment:1,prompt:'最高'" style="width:30%;">
+		            </div>
+			        <div style="margin:10px;width:45%;border:10px;float:left">
+			            <input id="education" class="easyui-textbox" label="学历:" labelPosition="left" labelAlign="left" style="width:82%;">
+			        </div>
+			        <div style="margin:10px;width:45%;border:10px;float:left">
+			            <input id="mobileNo" class="easyui-textbox" label="手机号:" labelPosition="left" labelAlign="left" style="width:82%;">
+			        </div>
+			        <div style="margin:10px;width:45%;border:10px;float:left">
+			        	<label class="textbox-label textbox-label-left" style="text-align:left;">工作年限:</label>
+			            <input id="workingAgeMin" class="easyui-numberspinner" data-options="increment:1,prompt:'最低'" style="width:30%;">
+			            <em><b> - </b></em>
+			            <input id="workingAgeMax" class="easyui-numberspinner" data-options="increment:1,prompt:'最高'" style="width:30%;">
+		            </div>
+			        <div style="margin:10px;width:45%;border:10px;float:left">
+			        	<label class="textbox-label textbox-label-left" style="text-align:left;">期望薪资:</label>
+			            <input id="expectedPayMin" class="easyui-numberspinner" data-options="increment:1,prompt:'最低'" style="width:30%;">
+			            <em><b> - </b></em>
+			            <input id="expectedPayMax" class="easyui-numberspinner" data-options="increment:1,prompt:'最高'" style="width:30%;">
+		            </div>
+			        <div style="margin:10px;width:45%;border:10px;float:left">
+			        	<label class="textbox-label textbox-label-left" style="text-align:left;">出生日期:</label>
+			            <input id="birthdayMin" class="easyui-datebox" style="width:30%;" data-options="editable:false,prompt:'最低'">
+			            <em><b> - </b></em>
+			            <input id="birthdayMax"class="easyui-datebox" style="width:30%;" data-options="editable:false,prompt:'最高'">
+		            </div>
+			        <div style="margin-top:100px;width:90%;border:10px;float:left;position:relative;display:flex;justify-content:center;">
+					    <div style="margin:0 20px">
+						    <a id="clearQueryCriteria" href="#" class="easyui-linkbutton">清除查询条件</a>
+					    </div>
+					    <div style="margin:0 20px">
+						    <a id="queryFuzzy" href="#" class="easyui-linkbutton">查询</a>
+					    </div>
+		            </div>
+			    </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

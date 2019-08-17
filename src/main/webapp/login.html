@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>用户登录</title>
+    <link rel="stylesheet" type="text/css" href="styles/demo.css">
+    <link rel="stylesheet" type="text/css" href="libs/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="libs/easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="libs/easyui/themes/color.css">
+    <script type="text/javascript" src="libs/jquery/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="libs/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="libs/easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="scripts/myExtend.js"></script>
+    <script type="text/javascript" src="scripts/common.js"></script>
+    <script type="text/javascript" src="scripts/login.js"></script>
+</head>
+<body class="easyui-layout">
+	<div data-options="region:'center'" data-options="fit:true">
+	    <div class="easyui-panel" title="新增用户" style="width:50%;margin:0 auto">
+	        <form id="ff" method="post">
+	            <div style="margin:20px auto;">
+	                <input class="easyui-textbox" name="name" style="width:50%" data-options="label:'用户名:',required:true">
+	            </div>
+	            <div style="margin:20px auto;">
+	                <input class="easyui-textbox" name="pwd" style="width:50%" data-options="label:'密码:',required:true">
+	            </div>
+	        </form>
+	        <div style="text-align:center;padding:5px 0">
+	            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" style="width:80px">Submit</a>
+	            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()" style="width:80px">Clear</a>
+	        </div>
+	    </div>
+	</div>
+</body>
+</html>

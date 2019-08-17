@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>员工详情</title>
+    <link rel="stylesheet" type="text/css" href="../styles/demo.css">
+    <link rel="stylesheet" type="text/css" href="../libs/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../libs/easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="../libs/easyui/themes/color.css">
+    <script type="text/javascript" src="../libs/jquery/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="../libs/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../libs/easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../scripts/myExtend.js"></script>
+    <script type="text/javascript" src="../scripts/common.js"></script>
+    <script type="text/javascript" src="../scripts/employeeDetail.js"></script>
+</head>
+<body class="easyui-layout">
+	<div data-options="region:'south'" style="height:50%;">
+	    <div id="detailAccordion" class="easyui-accordion" data-options="fit:true">
+	        <div title="工种" data-options="iconCls:'icon-ok'" style="overflow:auto;padding:10px;">
+				<ul id="workTypes" class="easyui-datalist" lines="true" data-options="fit:false">
+				 </ul>
+	        </div>
+	        <div title="相关证书" data-options="iconCls:'icon-ok'" style="overflow:auto;padding:10px;">
+				<ul id="certifications" class="easyui-datalist" lines="true" data-options="fit:false">
+				 </ul>
+	        </div>
+	        <div title="工作经历" data-options="iconCls:'icon-ok'" style="overflow:auto;padding:10px;">
+				<ul id="workingHistorys" class="easyui-datalist" lines="true" data-options="fit:false">
+				 </ul>
+	        </div>
+	    </div>		
+	</div>
+	<div data-options="region:'east',iconCls:'icon-ok',collapsible:false" title="照片" style="width:25%;">
+		<div class="image-container" style="width:90%;height:90%; margin:auto auto;" >
+			<img id="pictureId" alt="照片">
+		</div>
+	</div>
+	<div data-options="region:'center',title:'基本信息',iconCls:'icon-ok'" style="height:50%;">
+	    <div class="easyui-panel" data-options="fit:true">
+			<table id="employeeDetail" class="table_wrap">
+			  <tbody>
+			  <tr>
+				  <td class="key"><span class="c-red">* </span>姓名</td>
+				  <td class="value" style="height:33px;line-height:33px">
+					  <span id="employeeName" class="" style="display:inline-block;padding-left: 4px;">张三</span>
+				  </td>
+				  <td class="key"><span class="c-red">* </span>性别</td>
+				  <td class="value" style="height:32px">
+				      <span id="gender" class="" style="display: inline-block;padding-left: 4px;"></span>
+                  </td>
+			  </tr>
+			  <tr>
+				  <td class="key"><span class="c-red">* </span>户籍</td>
+				  <td class="value" style="height:33px;line-height:33px">
+					  <span id="province" class="" style="display:inline-block;padding-left: 4px;"></span>
+				  </td>
+				  <td class="key"><span class="c-red">* </span>身份证号码</td>
+				  <td class="value" style="height:32px">
+				      <span id="idNo" class="" style="display: inline-block;padding-left: 4px;"></span>
+                  </td>
+			  </tr>
+			  <tr>
+				  <td class="key"><span class="c-red">* </span>出生日期</td>
+				  <td class="value" style="height:33px;line-height:33px">
+					  <span id="birthday" class="" style="display:inline-block;padding-left: 4px;"></span>
+				  </td>
+				  <td class="key"><span class="c-red">* </span>年龄</td>
+				  <td class="value" style="height:32px">
+				      <span id="age" class="" style="display: inline-block;padding-left: 4px;"></span>
+                  </td>
+			  </tr>
+			  <tr>
+				  <td class="key"><span>&nbsp;&nbsp;</span>属相</td>
+				  <td class="value" style="height:32px">
+				      <span id="zodiac" class="" style="display: inline-block;padding-left: 4px;"></span>
+                  </td>
+				  <td class="key"><span>&nbsp;&nbsp;</span>身高(cm)</td>
+				  <td class="value" style="height:33px;line-height:33px">
+					  <span id="height" class="" style="display:inline-block;padding-left: 4px;"></span>
+				  </td>
+			  </tr>
+			  <tr>
+				  <td class="key"><span>&nbsp;&nbsp;</span>体重(kg)</td>
+				  <td class="value" style="height:32px">
+				      <span id="weight" class="" style="display: inline-block;padding-left: 4px;"></span>
+                  </td>
+				  <td class="key"><span>&nbsp;&nbsp;</span>工作年限(年)</td>
+				  <td class="value" style="height:32px">
+				      <span id="workingAge" class="" style="display: inline-block;padding-left: 4px;"></span>
+                  </td>
+			  </tr>
+			  <tr>
+				  <td class="key"><span>&nbsp;&nbsp;</span>手机号码</td>
+				  <td class="value" style="height:33px;line-height:33px">
+					  <span id="mobileNo" class="" style="display:inline-block;padding-left: 4px;"></span>
+				  </td>
+				  <td class="key"><span>&nbsp;&nbsp;</span>学历</td>
+				  <td class="value" style="height:33px;line-height:33px">
+					  <span id="education" class="" style="display:inline-block;padding-left: 4px;"></span>
+				  </td>
+			  </tr>
+			  <tr>
+				  <td class="key"><span>&nbsp;&nbsp;</span>期望工资(元)</td>
+				  <td class="value" style="height:33px;line-height:33px">
+					  <span id="expectedPay" class="" style="display:inline-block;padding-left: 4px;"></span>
+				  </td>
+			  </tr>
+			  </tbody>
+			</table>
+	    </div>
+	</div>
+</body>
+
+</html>
