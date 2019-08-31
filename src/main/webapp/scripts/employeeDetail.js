@@ -23,7 +23,7 @@ function queryEmployeeDetail(employeeId) {
 }
 
 function displayEmployeeDetail(employeeDetail) {
-	$('#employeeDetail td.value span').each(function() {
+	$('table#employeeDetail span.fieldValue').each(function() {
 		var span = $(this);
 		var fieldName = span.attr('id');
 		var fieldValue = employeeDetail[fieldName];
@@ -61,7 +61,7 @@ function displayCertificationPictures(employeeDetail) {
 	});
 	
 	$(certificationPictures).each(function(index, certificationPicture) {
-		var html = '<img class="certificationPicture" alt="图像" style="width:500px;height:500px;" src="/pics/' + certificationPicture.pictureId + '">';
+		var html = '<img class="certificationPicture" alt="图像" style="width:500px;height:500px;margin:3px;" src="/pics/' + certificationPicture.pictureId + '">';
 		$('#certificationPictures').append(html);
 	});
 }

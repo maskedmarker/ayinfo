@@ -21,7 +21,7 @@
  		<result column="TAG" property="tag" />
 		<result column="WORK_TYPE" property="workType" />
 		<result column="CERTIFICATION" property="certification" />
-		<result column="PICTURE_ID" property="pictureId" />
+		<result column="HEAD" property="pictureId" />
 		<result column="ADDED_DATE" property="addedDate" />
 		<result column="ADDED_BY" property="addedBy" />
 		<result column="UPDATED_DATE" property="updatedDate" />
@@ -72,37 +72,46 @@
 	</select>
 	
 	<select id="getFuzzyPageList" parameterType="map" resultMap="EmployeeMap">
-	    select * from employee
-		<where>
-		    <if test="param != null">
-		        <trim prefixOverrides="and">
-				    <if test="param.employeeName != null">and employee_Name like concat('%', #{param.employeeName}, '%')</if>
-				    <if test="param.gender != null">and gender = #{param.gender}</if>
-				    <if test="param.birthdayMin != null">and birthday <![CDATA[>=]]> #{param.birthdayMin}</if>
-				    <if test="param.birthdayMax != null">and birthday <![CDATA[<=]]> #{param.birthdayMax}</if>
-				    <if test="param.ageMin != null">and age <![CDATA[>=]]> #{param.ageMin}</if>
-				    <if test="param.ageMax != null">and age <![CDATA[<=]]> #{param.ageMax}</if>
-				    <if test="param.heightMin != null">and height <![CDATA[>=]]> #{param.heightMin}</if>
-				    <if test="param.heightMax != null">and height <![CDATA[<=]]> #{param.heightMax}</if>
-				    <if test="param.weightMin != null">and weight <![CDATA[>=]]> #{param.weightMin}</if>
-				    <if test="param.weightMax != null">and weight <![CDATA[<=]]> #{param.weightMax}</if>
-				    <if test="param.zodiac != null">and zodiac = #{param.zodiac}</if>
-				    <if test="param.province != null">and province = #{param.province}</if>
-				    <if test="param.idNo != null">and id_no like concat('%', #{param.idNo}, '%')}</if>
-				    <if test="param.mobileNo != null">and mobile_no like concat('%', #{param.mobileNo}, '%')</if>
-				    <if test="param.education != null">and education = #{param.education}</if>
-				    <if test="param.tag != null">and tag like concat('%', #{param.tag}, '%')</if>
-				    <if test="param.workType != null">and work_type like concat('%', #{param.workType}, '%')</if>
-				    <if test="param.workingAgeMin != null">and working_age <![CDATA[>=]]> #{param.workingAgeMin}</if>
-				    <if test="param.workingAgeMax != null">and working_age <![CDATA[<=]]> #{param.workingAgeMax}</if>
-				    <if test="param.certification != null">and certification like concat('%', #{param.certification}, '%')</if>
-				    <if test="param.expectedPayMin != null">and expected_pay <![CDATA[>=]]> #{param.expectedPayMin}</if>
-				    <if test="param.expectedPayMax != null">and expected_pay <![CDATA[<=]]> #{param.expectedPayMax}</if>
-		        </trim>
-		    </if>
-		</where>
-		order by employee_Id
-		limit #{offset},#{count}
+		select *
+		from (
+			    select * from employee
+				<where>
+				    <if test="param != null">
+				        <trim prefixOverrides="and">
+						    <if test="param.employeeName != null">and employee_Name like concat('%', #{param.employeeName}, '%')</if>
+						    <if test="param.gender != null">and gender = #{param.gender}</if>
+						    <if test="param.birthdayMin != null">and birthday <![CDATA[>=]]> #{param.birthdayMin}</if>
+						    <if test="param.birthdayMax != null">and birthday <![CDATA[<=]]> #{param.birthdayMax}</if>
+						    <if test="param.ageMin != null">and age <![CDATA[>=]]> #{param.ageMin}</if>
+						    <if test="param.ageMax != null">and age <![CDATA[<=]]> #{param.ageMax}</if>
+						    <if test="param.heightMin != null">and height <![CDATA[>=]]> #{param.heightMin}</if>
+						    <if test="param.heightMax != null">and height <![CDATA[<=]]> #{param.heightMax}</if>
+						    <if test="param.weightMin != null">and weight <![CDATA[>=]]> #{param.weightMin}</if>
+						    <if test="param.weightMax != null">and weight <![CDATA[<=]]> #{param.weightMax}</if>
+						    <if test="param.zodiac != null">and zodiac = #{param.zodiac}</if>
+						    <if test="param.province != null">and province = #{param.province}</if>
+						    <if test="param.idNo != null">and id_no like concat('%', #{param.idNo}, '%')}</if>
+						    <if test="param.mobileNo != null">and mobile_no like concat('%', #{param.mobileNo}, '%')</if>
+						    <if test="param.education != null">and education = #{param.education}</if>
+						    <if test="param.tag != null">and tag like concat('%', #{param.tag}, '%')</if>
+						    <if test="param.workType != null">and work_type like concat('%', #{param.workType}, '%')</if>
+						    <if test="param.workingAgeMin != null">and working_age <![CDATA[>=]]> #{param.workingAgeMin}</if>
+						    <if test="param.workingAgeMax != null">and working_age <![CDATA[<=]]> #{param.workingAgeMax}</if>
+						    <if test="param.certification != null">and certification like concat('%', #{param.certification}, '%')</if>
+						    <if test="param.expectedPayMin != null">and expected_pay <![CDATA[>=]]> #{param.expectedPayMin}</if>
+						    <if test="param.expectedPayMax != null">and expected_pay <![CDATA[<=]]> #{param.expectedPayMax}</if>
+				        </trim>
+				    </if>
+				</where>
+				order by employee_Id
+				limit #{offset},#{count}
+		) e left join 
+		(
+		  select p.employee_id, max(p.picture_id) head
+		    from certification_picture p
+		   where p.picture_type = 'head'
+		   group by p.employee_id
+		) t on e.employee_id = t.employee_id
 	</select>
 	
 	<insert id="add" useGeneratedKeys="true" keyProperty="employeeId" parameterType="org.cjh.ayinfo.entity.Employee">

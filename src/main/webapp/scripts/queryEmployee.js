@@ -15,9 +15,9 @@ $(function() {
 				frozen: true
 			},
 			{
-				field: 'gender',
-				title: '性别',
-				width: '4%',
+				field: 'workType',
+				title: '工作类型',
+				width: '8%',
 				sortable: true
 			},
 			{
@@ -27,10 +27,17 @@ $(function() {
 				sortable: true
 			},
 			{
-				field: 'idNo',
-				title: '身份证号码',
+				field: 'pictureId',
+				title: '头像',
 				width: '12%',
-				sortable: true
+				sortable: false,
+				formatter: function(value,row,index) {
+					if (!value) {
+						return "";
+					}
+					var pictureId = value;
+					return '<img class="certificationPicture" alt="图像" style="width:150px;height:150px;margin:1px;" src="/pics/' + pictureId + '">';
+				}
 			},
 			{
 				field: 'birthday',
@@ -88,12 +95,12 @@ $(function() {
 				width: '7%',
 				sortable: true
 			},
-			{
-				field: 'addedBy',
-				title: '操作者',
-				width: '6%',
-				sortable: true
-			},
+//			{
+//				field: 'addedBy',
+//				title: '操作者',
+//				width: '6%',
+//				sortable: true
+//			},
 			{
 				field: 'addedDate',
 				title: '录入时间',
