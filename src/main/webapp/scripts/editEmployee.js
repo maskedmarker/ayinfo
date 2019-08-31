@@ -1,3 +1,5 @@
+var fieldNames = ['employeeName', 'gender', 'province', 'idNo', 'birthday', 'age', 'zodiac', 'height', 'weight', 
+	'workingAge', 'mobileNo', 'education', 'expectedPay', 'workTypes', 'certifications','workingHistorys'];
 var employeeDetail = {};
 var submited = false;
 
@@ -73,35 +75,37 @@ function initEasyuiComponent() {
 		}
 	});
 	
-	$('#workTypes').combobox({
-		editable: false,
-		multiple:true,
-		panelHeight: 'auto',
-		data: ayinfo.config.workTypes,
+	$('#workTypes').textbox({
 		onChange: function(newValue,oldValue) {
-			employeeDetail.workTypes = newValue;
+			employeeDetail.workTypes = employeeDetail.workTypes || [];
+			if (newValue == null || newValue == "") {
+				employeeDetail.workTypes.pop();
+			} else {
+				employeeDetail.workTypes[0] = newValue;
+			}
 		}	
 	});
 	
-	$('#certifications').combobox({
-		editable: false,
-		multiple:true,
-		panelHeight: 'auto',
-		data: ayinfo.config.certifications,
+	$('#certifications').textbox({
 		onChange: function(newValue,oldValue) {
-			employeeDetail.certifications = newValue;
+			employeeDetail.certifications = employeeDetail.certifications || [];
+			if (newValue == null || newValue == "") {
+				employeeDetail.certifications.pop();
+			} else {
+				employeeDetail.certifications[0] = newValue;
+			}
 		}	
 	});
-
+	
 	$('#workingHistorys').textbox({
-		icons : [ 
-			{
-				iconCls : 'icon-add',
-				handler : function(e) {
-					$('#dd').dialog('open');
-				}
-			},
-		]
+		onChange: function(newValue,oldValue) {
+			employeeDetail.workingHistorys = employeeDetail.workingHistorys || [];
+			if (newValue == null || newValue == "") {
+				employeeDetail.workingHistorys.pop();
+			} else {
+				employeeDetail.workingHistorys[0] = {des: newValue};
+			}
+		}
 	});
 	
 	$('.easyui-textbox, .easyui-combobox, .easyui-numberspinner, .easyui-datebox', $('.employeeDetail')).textbox('clear');
@@ -127,49 +131,43 @@ function initMainUIValue() {
 	$('#mobileNo').textbox('setValue', employeeDetail.mobileNo);
 	$('#education').textbox('setValue', employeeDetail.education);
 	$('#expectedPay').numberspinner('setValue', employeeDetail.expectedPay);
-	$('#workTypes').combobox('setValues', employeeDetail.workTypes || []);
-	$('#certifications').combobox('setValues', employeeDetail.certifications || []);
-
-	initWorkingHistoryUI();
-}
-
-function initWorkingHistoryUI() {
-	if (!employeeDetail.workingHistorys || employeeDetail.workingHistorys.length == 0) {
-		return;
-	}
+	$('#workTypes').textbox('setValue', employeeDetail.workTypes && employeeDetail.workTypes[0]);
+	$('#certifications').textbox('setValue', employeeDetail.certifications && employeeDetail.certifications[0]);
+	$('#workingHistorys').textbox('setValue', employeeDetail.workingHistorys && (employeeDetail.workingHistorys[0] && employeeDetail.workingHistorys[0].des));
 	
-	for (var i = 0; i < employeeDetail.workingHistorys.length; i++) {
-		appendWorkingHistoryPanel();
-	}
-	var index = 0;
-	$("#workingHistorysPanelContainer .workingHistory").each(function() {
-		var workingHistory = employeeDetail.workingHistorys[index++];
-		$(".startDate", $(this)).datebox('setValue', $.fn.datebox.defaults.formatter(new Date(workingHistory.startDate)));
-		$(".endDate", $(this)).datebox('setValue', $.fn.datebox.defaults.formatter(new Date(workingHistory.endDate)));
-		$(".des", $(this)).textbox('setValue', workingHistory.des);
-	});
+	//display picture
+	displayHeadPicture();
+	displayCertificationPictures();
+	displayFullBodyPicture();
+	
 }
 
 function queryEmployeeDetail(employeeId) {
-	//loading modal
+	$.messager.progress({
+		title: '提示',
+		text: '正在加载数据!'
+	});
 	$.ajax({
 		url : '/ayinfo/employee/getEmployeeDetailById.do',
 		type : 'get',
 		data: {employeeId: employeeId},
 		dataType : 'json',
 		success : function(resp) {
+			$.messager.progress('close');
 			if (resp.errCode == 0) {
 				employeeDetail = resp.data;
 				initMainUIValue();
 			}
 		},
 		error : function(resp) {
+			$.messager.progress('close');
 			$.messager.alert('警告', '查询信息失败,请联系管理员!');
 		}
 	});
 }
 
-function updateEmployeeDetail() {
+function addEmployeeDetail() {
+	var dfd = jQuery.Deferred();
 	$.ajax({
 		url: '/ayinfo/employee/updateEmployeeDetail.do',
 		type: 'POST',
@@ -182,42 +180,82 @@ function updateEmployeeDetail() {
 			} else {
 				$.messager.alert('警告', resp.Msg);
 			}
+			dfd.resolve('addEmployeeDetail');
 		},
 		error : function(resp) {
 			$.messager.alert('警告', '上传信息失败,请联系管理员!');
 		}
-	});				
+	});
+	
+	return dfd;
 }
 
+
+
 function uploadHeadPicture() {
-	var pictures = $('#picture').filebox('files');
-	if (pictures.length == 0) {
-		employeeDetail.pictureId = ayinfo.config.defaultHeadImage;
-		return;
-	}
-	
-	var formData = new FormData();
-	formData.append("picture", pictures[0]);
-	$.ajax({
-		url: '/ayinfo/employee/uploadPicture.do',
-		type: 'POST',
-		async: false,
-		data: formData,
-		processData: false,
-		contentType: false,
-		dataType: 'json',
-		success : function(resp) {
+	var dfd = jQuery.Deferred();
+	if (!hasFile('#headPicture')) {
+		dfd.resolve();
+	} else {
+		uploadFilebox('#headPicture', function(resp) {
 			if (resp.errCode == 0) {
-				var pictureId = resp.data;
-				employeeDetail.pictureId = pictureId;
+				pictureIds = resp.data;
+				employeeDetail.certificationPictures = employeeDetail.certificationPictures || [];
+				pictureIds.forEach(function(picId) {
+					employeeDetail.certificationPictures.push({pictureType: 'head', pictureId: picId});
+				});
+				dfd.resolve('uploadHeadPicture');
 			} else {
 				$.messager.alert('警告', resp.Msg);
 			}
-		},
-		error : function(resp) {
-			$.messager.alert('警告', '图片上传失败,请联系管理员!');
-		}
-	});
+		})
+	}
+	
+	return dfd;
+}
+
+function uploadFullBodyPicture() {
+	var dfd = jQuery.Deferred();
+	if (!hasFile('#fullBodyPicture')) {
+		dfd.resolve();
+	} else {
+		uploadFilebox('#fullBodyPicture', function(resp) {
+			if (resp.errCode == 0) {
+				var pictureIds = resp.data;
+				employeeDetail.certificationPictures = employeeDetail.certificationPictures || [];
+				pictureIds.forEach(function(picId) {
+					employeeDetail.certificationPictures.push({pictureType: 'fullBody', pictureId: picId});
+				});
+				dfd.resolve('fullBodyPicture');
+			} else {
+				$.messager.alert('警告', resp.Msg);
+			}
+		})
+	}
+	
+	return dfd;
+}
+
+function uploadCertificationPictures(success) {
+	var dfd = jQuery.Deferred();
+	if (!hasFile('#certificationPictures')) {
+		dfd.resolve();
+	} else {
+		uploadFilebox('#certificationPictures', function(resp) {
+			if (resp.errCode == 0) {
+				var pictureIds = resp.data;
+				employeeDetail.certificationPictures = employeeDetail.certificationPictures || [];
+				pictureIds.forEach(function(picId) {
+					employeeDetail.certificationPictures.push({pictureType: 'certification', pictureId: picId});
+				});
+				dfd.resolve('certificationPictures');
+			} else {
+				$.messager.alert('警告', resp.Msg);
+			}
+		})
+	}
+	
+	return dfd;
 }
 
 function submitEmployeeDetail() {
@@ -227,41 +265,34 @@ function submitEmployeeDetail() {
 		fn: function(r) {
 			if (r) {
 				$('#submit').linkbutton('disable');
+				$('#clear').linkbutton('disable');
 				var valid = validateInfo();
 				if (!valid) {
 					$('#submit').linkbutton('enable');
+					$('#clear').linkbutton('enable');
 					return;
 				}
 				
-				uploadHeadPicture();
-				updateEmployeeDetail();
+				$.when(uploadHeadPicture(), uploadFullBodyPicture(), uploadCertificationPictures())
+				.done(addEmployeeDetail);
 			}
-		}		
+		}
 	});
 }
 
 function validateInfo() {
-	var fields = ['#employeeName', '#gender', '#province', '#idNo', '#birthday', '#age', '#zodiac', '#height', '#weight', 
-		'#workingAge', '#mobileNo', '#education', '#expectedPay', '#workTypes', '#certifications'];
-	for (var field of fields) {
-		var componentType = getComponentType(field);
-		var valid = $(field)[componentType]('isValid');
+	for (var fieldName of fieldNames) {
+		var fieldId = '#' + fieldName;
+		var componentType = getComponentType(fieldId);
+		var valid = $(fieldId)[componentType]('isValid');
 		if (!valid) {
-			var label = $(field)[componentType]('options').label;
+			var label = $(fieldId)[componentType]('options').label;
 			label = label.replace(':', '');
-			$.messager.alert('提示', '<b>' + label+'</b><br/>数据格式不合法,请确认后再提交信息!');
+			$.messager.alert('提示', '<b>' + label+'</b><br/>必填数据不能为空或者数据长度不合法!');
 			return false;
 		}
 	}
 	return true;
-}
-
-function clearPreparedInfo() {
-	$.messager.confirm('提示', '确认清除待提交用户信息?', function(r) {
-		if (r) {
-			$('.easyui-textbox, .easyui-combobox, .easyui-numberspinner, .easyui-datebox', $('.employeeDetail')).textbox('clear');
-		}
-	});
 }
 
 function closeCreateWindow() {
@@ -276,76 +307,57 @@ function closeCreateWindow() {
 	});
 }
 
-function appendWorkingHistoryPanel() {
-	var copy = $($.parseHTML($("#workingHistoryPanelTemplate").html())).appendTo($("#workingHistorysPanelContainer"));
-	$.parser.parse(copy);
-}
-
-function removeWorkingHistoryPanel() {
-	var workingHistoryPanelList = $(".workingHistory");
-	if (workingHistoryPanelList == null || workingHistoryPanelList.length === 0) {
+function displayCertificationPictures() {
+	if (employeeDetail.certificationPictures == null || employeeDetail.certificationPictures.length == 0) {
 		return;
-	}
-	workingHistoryPanelList.last().remove();
-}
-
-function confirmWorkingHistoryPanel() {
-	var valid = validateWorkingHistorys();
-	if (!valid) {
-		return;
-	}
-	var workingHisList = getWorkingHisList();
-	employeeDetail.workingHistorys = workingHisList;
-	$('#dd').dialog('close');
-}
-
-function getWorkingHisList() {
-	var workingHisList = [];
-	var workingHistoryPanelList = $(".workingHistory");
-	if (workingHistoryPanelList == null || workingHistoryPanelList.length === 0) {
-		return workingHisList;
 	}
 	
-	workingHistoryPanelList.each(function(index, workingHistoryPanel) {
-		var startDate = $('.startDate', workingHistoryPanel).datebox('getValue');
-		var endDate = $('.endDate', workingHistoryPanel).datebox('getValue');
-		var des = $('.des', workingHistoryPanel).textbox('getValue');
-		var workingHistory = {
-				startDate: startDate,
-				endDate: endDate,
-				des: des,
-		};
-		workingHisList.push(workingHistory);
+	var certificationPictures = employeeDetail.certificationPictures.filter(function (element) {
+		return 'certification' == element.pictureType;
 	});
-	return workingHisList;
+	
+	$(certificationPictures).each(function(index, certificationPicture) {
+		loadUploadedPic('/pics/' + certificationPicture.pictureId, '#displayCertificationPictures', function(picId) {
+			employeeDetail.certificationPictures = employeeDetail.certificationPictures.filter(function(certificationPicture) {
+				return picId != certificationPicture.pictureId;
+			});
+		});
+	});
 }
 
-function validateWorkingHistorys() {
-	var workingHistorys = $('.workingHistory');
-	if (workingHistorys.length == 0) {
-		return true;
+function displayFullBodyPicture() {
+	if (employeeDetail.certificationPictures == null || employeeDetail.certificationPictures.length == 0) {
+		return;
 	}
 	
-	var fieldClsz = ['.startDate', '.endDate', '.des'];
-	for (var i = 0; i < workingHistorys.length; i++) {
-		var workingHistory = workingHistorys[i];
-		var itemValid = true;
-		for (var fieldCls of fieldClsz) {
-			var field = $(fieldCls, workingHistory);
-			var componentType = getComponentType(field);
-			var valid = $(field)[componentType]('isValid');
-			if (!valid) {
-				var label = $(field)[componentType]('options').label;
-				label = label.replace(':', '');
-				$.messager.alert('提示', '<b>' + label+'</b><br/>数据格式不合法,请确认后再提交信息!');
-				itemValid = false;
-				break;
-			}
-		}
-		if (!itemValid) {
-			return false;
-		}
-	}
+	var certificationPictures = employeeDetail.certificationPictures.filter(function (element) {
+		return 'fullBody' == element.pictureType;
+	});
 	
-	return true;
+	$(certificationPictures).each(function(index, certificationPicture) {
+		loadUploadedPic('/pics/' + certificationPicture.pictureId, '#displayFullBodyPicture', function(picId) {
+			employeeDetail.certificationPictures = employeeDetail.certificationPictures.filter(function(certificationPicture) {
+				return picId != certificationPicture.pictureId;
+			});
+		});
+	});
 }
+
+function displayHeadPicture() {
+	if (employeeDetail.certificationPictures == null || employeeDetail.certificationPictures.length == 0) {
+		return;
+	}
+	
+	var certificationPictures = employeeDetail.certificationPictures.filter(function (element) {
+		return 'head' == element.pictureType;
+	});
+	
+	$(certificationPictures).each(function(index, certificationPicture) {
+		loadUploadedPic('/pics/' + certificationPicture.pictureId, '#displayHeadPicture', function(picId) {
+			employeeDetail.certificationPictures = employeeDetail.certificationPictures.filter(function(certificationPicture) {
+				return picId != certificationPicture.pictureId;
+			});
+		});
+	});
+}
+

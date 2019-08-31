@@ -9,9 +9,11 @@ function queryEmployeeDetail(employeeId) {
 		success : function(resp) {
 			if (resp.errCode == 0) {
 				employeeDetail = resp.data;
-				fillEmployeeDetail(employeeDetail);
-				fillDetailAccordion(employeeDetail);
-				$('#pictureId').attr('src', '/pics/' + employeeDetail.pictureId);
+				displayEmployeeDetail(employeeDetail);
+				displayWorkingHistorys(employeeDetail);
+				displayHeadPicture(employeeDetail);
+				displayCertificationPictures(employeeDetail);
+				displayFullBodyPicture(employeeDetail);
 			}
 		},
 		error : function(resp) {
@@ -20,7 +22,7 @@ function queryEmployeeDetail(employeeId) {
 	});
 }
 
-function fillEmployeeDetail(employeeDetail) {
+function displayEmployeeDetail(employeeDetail) {
 	$('#employeeDetail td.value span').each(function() {
 		var span = $(this);
 		var fieldName = span.attr('id');
@@ -35,51 +37,63 @@ function fillEmployeeDetail(employeeDetail) {
 	});
 }
 
-function fillDetailAccordion(employeeDetail) {
-	fillDataList('#workTypes', employeeDetail, 'workTypes', null);
-	fillDataList('#certifications', employeeDetail, 'certifications', null);
-	fillDataList('#workingHistorys', employeeDetail, 'workingHistorys', function(wh) {
-		var st = new Date(wh.startDate).getYear() + 1900;
-		var ed = new Date(wh.endDate).getYear() + 1900;
-		return "{0}年-{1}年, {2}".format(st, ed, wh.des);
-	});
-}
-
-function fillworkTypes(employeeDetail) {
-	var workTypes = employeeDetail.workTypes;
-	if (!$.isArray(workTypes)) {
-		return;
-	}
-	var targetList = [];
-	workTypes.forEach(function(item, index, array) {
-		targetList.push({text: item});
-	});
-	$('#workTypes').datalist('loadData', targetList);
-}
-
-function defaultFormatter(item) {
-	return item;
-}
-
-function fillDataList(selector, data, fieldName, formatter) {
-	if (data === null) {
-		return;
-	}
-	var rawList = data[fieldName];
-	if (!$.isArray(rawList)) {
+function displayWorkingHistorys(employeeDetail) {
+	var workingHistorys = employeeDetail.workingHistorys;
+	if (workingHistorys == null || workingHistorys == 0) {
 		return;
 	}
 	
-	if (formatter === null) {
-		formatter = defaultFormatter;
-	}
-	var targetList = [];
-	rawList.forEach(function(item, index, array) {
-		var content = formatter.call(item, item);
-		targetList.push({text: content});
+	$(workingHistorys).each(function(index, workingHistory) {
+		var regExp = new RegExp('\n', 'gm');
+		var des = workingHistory.des ? workingHistory.des.replace(regExp, '<br/>') : '';
+		var html = '<span>' + des + '</span>';
+		$('#workingHistorys ol').append(html);
 	});
-	$(selector).datalist('loadData', targetList);
 }
+
+function displayCertificationPictures(employeeDetail) {
+	if (employeeDetail.certificationPictures == null || employeeDetail.certificationPictures.length == 0) {
+		return;
+	}
+	
+	var certificationPictures = employeeDetail.certificationPictures.filter(function (element) {
+		return 'certification' == element.pictureType;
+	});
+	
+	$(certificationPictures).each(function(index, certificationPicture) {
+		var html = '<img class="certificationPicture" alt="图像" style="width:500px;height:500px;" src="/pics/' + certificationPicture.pictureId + '">';
+		$('#certificationPictures').append(html);
+	});
+}
+
+function displayFullBodyPicture(employeeDetail) {
+	if (employeeDetail.certificationPictures == null || employeeDetail.certificationPictures.length == 0) {
+		return;
+	}
+	
+	var fullBodyPictures = employeeDetail.certificationPictures.filter(function (element) {
+		return 'fullBody' == element.pictureType;
+	});
+	
+	$(fullBodyPictures).each(function(index, fullBodyPicture) {
+		var html = '<img class="certificationPicture" alt="图像" style="width:500px;height:500px;" src="/pics/' + fullBodyPicture.pictureId + '">';
+		$('#fullBodyPicture').append(html);
+	});
+}
+
+function displayHeadPicture(employeeDetail) {
+	if (employeeDetail.certificationPictures == null || employeeDetail.certificationPictures.length == 0) {
+		return;
+	}
+	
+	var headPictures = employeeDetail.certificationPictures.filter(function (element) {
+		return 'head' == element.pictureType;
+	});
+	
+	$('#pictureId').attr('src', '/pics/' + headPictures[0].pictureId);
+}
+
+
 
 $(function() {
 	const urlParams = new URLSearchParams(window.location.search);

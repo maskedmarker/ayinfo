@@ -15,7 +15,7 @@
 	</resultMap>
   
   <select id="getById" parameterType="java.lang.Integer" resultMap="WorkingHistoryMap">
-      select * from working_history where employee_id = #{employeeId,jdbcType=INTEGER} order by start_date 
+      select * from working_history where employee_id = #{employeeId,jdbcType=INTEGER} order by start_date
   </select>
   
   <insert id="add" parameterType="org.cjh.ayinfo.entity.WorkingHistory">

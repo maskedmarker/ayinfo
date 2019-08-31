@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>编辑员工信息</title>
-    <link rel="stylesheet" type="text/css" href="../styles/demo.css">
+    <link rel="stylesheet" type="text/css" href="../libs/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="../libs/easyui/themes/default/easyui.css">
     <link rel="stylesheet" type="text/css" href="../libs/easyui/themes/icon.css">
     <link rel="stylesheet" type="text/css" href="../libs/easyui/themes/color.css">
+	<link rel="stylesheet" href="../libs/ssi-uploader/css/ssi-uploader.css"/>
     <script type="text/javascript" src="../libs/jquery/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="../libs/easyui/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="../libs/easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script src="../libs/ssi-uploader/ssi-uploader.js"></script>
     <script type="text/javascript" src="../scripts/myExtend.js"></script>
     <script type="text/javascript" src="../scripts/common.js"></script>
     <script type="text/javascript" src="../scripts/editEmployee.js"></script>
@@ -120,20 +122,52 @@
 		            	data-options="prompt:'元',precision:2">
 	            </div>
 		        <div style="margin:20px;">
-		            <input id="workTypes" class="combobox" label="工种:" labelPosition="left" labelAlign="left" style="width:95%"
+		            <input id="workTypes" class="easyui-textbox" label="工种:" labelPosition="left" labelAlign="left" style="width:95%"
 		            	data-options="validType:{length:[0,128]}">
 		        </div>
 		        <div style="margin:20px;">
-		            <input id="certifications" class="combobox" label="相关证书:" labelPosition="left" labelAlign="left" style="width:95%"
+		            <input id="certifications" class="easyui-textbox" label="相关证书:" labelPosition="left" labelAlign="left" style="width:95%"
 		            	data-options="validType:{length:[0,128]}">
 		        </div>
 		        <div style="margin:20px;">
-		            <input id="workingHistorys" class="easyui-textbox" label="工作经验:" labelPosition="left" labelAlign="left" style="width:95%"
-		            	data-options="prompt:'点击右侧图标,添加工作经验',editable:false">
+		            <input id="workingHistorys" class="easyui-textbox" label="工作经验:" labelPosition="left" labelAlign="left" style="width:95%;height:200px;"
+		            	data-options="multiline:true,validType:{length:[0,3000]}">
 		        </div>
 		        <div style="margin:20px;">
-		            <input id="picture" class="easyui-filebox" label="照片:" labelPosition="left" style="width:95%"
-		            	data-options="buttonText:'选择照片',accept:'image/*'" >
+		            <input id="headPicture" class="easyui-filebox" label="头像:" labelPosition="left" style="width:95%"
+		            	data-options="buttonText:'选择一张照片',accept:'image/*'" >
+	            </div>
+	            <div style="margin:20px;">
+					<div class="container">
+						<div class="row">
+							<div id="displayHeadPicture" class="col-md-8">
+							</div>
+						</div>
+					</div>
+	            </div>
+		        <div style="margin:20px;">
+		            <input id="certificationPictures" class="easyui-filebox" label="证书照片:" labelPosition="left" style="width:95%"
+		            	data-options="multiple:true,buttonText:'选择多张照片',accept:'image/*'" >
+	            </div>
+		        <div style="margin:20px;">
+					<div class="container">
+						<div class="row">
+							<div id="displayCertificationPictures" class="col-md-8">
+							</div>
+						</div>
+					</div>
+	            </div>
+	            <div style="margin:20px;">
+		            <input id="fullBodyPicture" class="easyui-filebox" label="全身照:" labelPosition="left" style="width:95%"
+		            	data-options="buttonText:'选择一张照片',accept:'image/*'" >
+	            </div>
+		        <div style="margin:20px;">
+					<div class="container">
+						<div class="row">
+							<div id="displayFullBodyPicture" class="col-md-8">
+							</div>
+						</div>
+					</div>
 	            </div>
 		        <div style="margin:50px 0;width:100%;position:relative;display:flex;justify-content:center;">
 				    <div style="margin:0 20px">
@@ -146,34 +180,23 @@
 	    	</form>
 	    </div>
     </div>
-    <div id="dd" class="easyui-dialog" style="width:1000px;height:600px;display:none" 
-    	data-options="iconCls:'icon-add',title:'填写工作经验',modal:true,closed:true,minimizable:false,collapsible:false,resizable:true">
-        <div class="easyui-layout" data-options="fit:true">
-            <div data-options="region:'center'" style="padding:10px;">
-            	<div>
-            		<a href="javascript:void(0)" class="easyui-linkbutton" onclick="javascript:appendWorkingHistoryPanel();">添加经验</a>
-            		<a href="javascript:void(0)" class="easyui-linkbutton" onclick="javascript:removeWorkingHistoryPanel();">删除经验</a>
-            		<a href="javascript:void(0)" class="easyui-linkbutton" onclick="javascript:confirmWorkingHistoryPanel();">确定</a>
-            	</div>
-            	<hr/>
-			    <div id="workingHistorysPanelContainer" class="easyui-panel" data-options="fit:true,border:false">
-			    </div>
-            </div>
-        </div>
-    </div>
 </body>
-<template id="workingHistoryPanelTemplate">
-	<div class="easyui-panel workingHistory" data-options="fit:false,border:true" style="width:90%;margin:20px 0px;">
-		<div style="margin:10px;">
-	    	<input class="easyui-datebox startDate" label="起始时间:" labelPosition="left" labelAlign="left" style="width:30%;" 
-	    		data-options="editable:false,required:true">
-	    	<input class="easyui-datebox endDate" label="结束时间:" labelPosition="left" labelAlign="left" style="width:30%;" 
-	    		data-options="editable:false,required:true">
-		</div>
-		<div style="margin:10px;">
-	        <input class="easyui-textbox des" label="工作内容:" labelPosition="left" labelAlign="left" style="width:90%;height:60px;"
-	        	data-options="multiline:true,required:true,validType:{length:[0,200]}">
-		</div>
-	</div>
+<template id="imageDisplayTemplate">
+	<table class="ssi-imgToUploadTable ssi-pending">
+		<tbody>
+			<tr>
+				<td class="ssi-upImgTd">
+					<img class="ssi-imgToUpload">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<button class="ssi-button error ssi-removeBtn">
+						<span class="trash10 trash"></span>
+					</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
 </template>
 </html>

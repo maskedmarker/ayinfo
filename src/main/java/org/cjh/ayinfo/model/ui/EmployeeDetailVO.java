@@ -1,9 +1,9 @@
 package org.cjh.ayinfo.model.ui;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.cjh.ayinfo.entity.CertificationPicture;
 import org.cjh.ayinfo.entity.WorkingHistory;
 
 public class EmployeeDetailVO {
@@ -31,6 +31,8 @@ public class EmployeeDetailVO {
     private Date updatedDate;
     private String updatedBy;
     private List<WorkingHistory> workingHistorys;
+    private List<CertificationPicture> certificationPictures;
+    
     public Integer getEmployeeId() {
         return employeeId;
     }
@@ -169,10 +171,18 @@ public class EmployeeDetailVO {
     public void setWorkingHistorys(List<WorkingHistory> workingHistorys) {
         this.workingHistorys = workingHistorys;
     }
+    public List<CertificationPicture> getCertificationPictures() {
+        return certificationPictures;
+    }
+    public void setCertificationPictures(List<CertificationPicture> certificationPictures) {
+        this.certificationPictures = certificationPictures;
+    }
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("EmployeeDetailVO [employeeId=");
+        builder.append("EmployeeDetailVO [");
+        builder.append(super.toString());
+        builder.append(" , employeeId=");
         builder.append(employeeId);
         builder.append(", employeeName=");
         builder.append(employeeName);
@@ -218,6 +228,8 @@ public class EmployeeDetailVO {
         builder.append(updatedBy);
         builder.append(", workingHistorys=");
         builder.append(workingHistorys);
+        builder.append(", certificationPictures=");
+        builder.append(certificationPictures);
         builder.append("]");
         return builder.toString();
     }

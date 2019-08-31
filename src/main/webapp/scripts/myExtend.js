@@ -56,3 +56,64 @@ function getComponentType(target){
 	}
 	return null;
 }
+
+$.extend($.fn.filebox.methods, {
+    getFile: function (myself) {
+        var temp = $(myself).next().children("[type='file']");
+        var file = document.getElementById(temp.attr("id"));
+
+        if (file.files.length > 0) {
+            // 若选中一个文件，则返回该文件的File对象
+            return file.files[0];
+        }
+
+        // 若未选中不论什么文件，则返回null
+        return null;
+    }
+});
+
+//display picture
+function loadUploadedPic(picSrc, container, delCallback) {
+	if (picSrc == null) {
+		return;
+	}
+	
+	var html = $("#imageDisplayTemplate").html()
+	var table = $($.parseHTML(html));
+	var img = table.find('img.ssi-imgToUpload').first().attr('src', picSrc);
+	var button = table.find('button').first().on('click', function() {
+		var picId = picSrc.split('/').pop();
+		table.remove();
+		delCallback && delCallback(picId);
+	});
+	
+	table.appendTo($(container));
+}
+
+function uploadFilebox(selector, success, error) {
+	var pictures = $(selector).filebox('files');
+	if (pictures.length == 0) {
+		return null;
+	}
+	
+	var formData = new FormData();
+	var pictures = $(selector).filebox('files');
+	for (var i = 0; i < pictures.length; i++) {
+		formData.append("files", pictures[i]);
+	}
+	return	$.ajax({
+		url: '/ayinfo/employee/uploadFiles.do',
+		type: 'POST',
+		data: formData,
+		processData: false,
+		contentType: false,
+		dataType: 'json',
+		success : success,
+		error : error
+	});		
+}
+
+function hasFile(selector) {
+	var pictures = $(selector).filebox('files');
+	return pictures.length != 0;
+}

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cjh.ayinfo.entity.CertificationPicture;
 import org.cjh.ayinfo.entity.Employee;
 import org.cjh.ayinfo.entity.WorkingHistory;
 import org.cjh.ayinfo.model.ui.EmployeeDetailVO;
@@ -13,7 +14,7 @@ import org.springframework.util.CollectionUtils;
 
 public class EmployeeVOFactory {
 
-    public static EmployeeDetailVO get(Employee em, List<WorkingHistory> workingHistorys) {
+    public static EmployeeDetailVO get(Employee em, List<WorkingHistory> workingHistorys, List<CertificationPicture> certificationPictures) {
         EmployeeDetailVO detail = new EmployeeDetailVO();
         BeanUtils.copyProperties(em, detail);
         
@@ -21,6 +22,7 @@ public class EmployeeVOFactory {
             workingHistorys = new ArrayList<>();
         }
         detail.setWorkingHistorys(workingHistorys);
+        detail.setCertificationPictures(certificationPictures);
         
         if(!StringUtils.isBlank(em.getTag())) {
             String[] strings = StringUtils.split(em.getTag(), '|');
