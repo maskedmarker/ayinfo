@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.cjh.ayinfo.entity.CertificationPicture">
+	<resultMap type="org.cjh.ayinfo.entity.CertificationPicture" id="CertificationPictureMap">
+		<result column="EMPLOYEE_ID" property="employeeId" />
+		<result column="PICTURE_TYPE" property="pictureType" />
+		<result column="PICTURE_ID" property="pictureId" />
+		<result column="ADDED_DATE" property="addedDate" />
+		<result column="ADDED_BY" property="addedBy" />
+		<result column="UPDATED_DATE" property="updatedDate" />
+		<result column="UPDATED_BY" property="updatedBy" />
+	</resultMap>
+  
+  <select id="getById" parameterType="java.lang.Integer" resultMap="CertificationPictureMap">
+      select * from certification_picture where employee_id = #{employeeId,jdbcType=INTEGER} order by picture_id
+  </select>
+  
+  <insert id="add" parameterType="org.cjh.ayinfo.entity.CertificationPicture">
+    insert into certification_picture
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="employeeId != null">
+        employee_id,
+      </if>
+      <if test="pictureType != null">
+        picture_type,
+      </if>
+      <if test="pictureId != null">
+        picture_id,
+      </if>
+      <if test="addedDate != null">
+        added_date,
+      </if>
+      <if test="addedBy != null">
+        added_by,
+      </if>
+      <if test="updatedDate != null">
+        updated_date,
+      </if>
+      <if test="updatedBy != null">
+        updated_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="employeeId != null">
+        #{employeeId,jdbcType=INTEGER},
+      </if>
+      <if test="pictureType != null">
+        #{pictureType,jdbcType=VARCHAR},
+      </if>
+      <if test="pictureId != null">
+        #{pictureId,jdbcType=VARCHAR},
+      </if>
+      <if test="addedDate != null">
+        #{addedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="addedBy != null">
+        #{addedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="delete" parameterType="java.lang.Integer">
+      delete from certification_picture where employee_id = #{employeeId,jdbcType=INTEGER}
+  </update>
+</mapper>

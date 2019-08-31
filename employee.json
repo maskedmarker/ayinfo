@@ -1,0 +1,105 @@
+{
+	"employeeId": 227,
+	"employeeName": "rrr",
+	"gender": "男",
+	"birthday": 1565654400000,
+	"age": 444,
+	"zodiac": "牛",
+	"height": 44.0,
+	"weight": 44.0,
+	"province": "天津市",
+	"idNo": "rrr",
+	"mobileNo": "4444",
+	"education": "444",
+	"tags": null,
+	"workTypes": [
+		"444 44 44"
+	],
+	"workingAge": 44.0,
+	"certifications": [
+		"444 444 444 444"
+	],
+	"expectedPay": 44444.0,
+	"pictureId": "b8bcb8a0f2744274a7a8fde819401bb0.jpg",
+	"addedDate": 1566250226000,
+	"addedBy": null,
+	"updatedDate": 1566250226000,
+	"updatedBy": null,
+	"workingHistorys": [
+		{
+			"addedDate": 1566250226000,
+			"addedBy": null,
+			"updatedDate": 1566250226000,
+			"updatedBy": null,
+			"employeeId": 227,
+			"des": "444444444444\n455555555555555\n56666666666666666\n77777777777777777777",
+			"startDate": null,
+			"endDate": null
+		}
+	],
+	"certificationPictures": [
+		{
+			"addedDate": 1566250226000,
+			"addedBy": null,
+			"updatedDate": 1566250226000,
+			"updatedBy": null,
+			"employeeId": 227,
+			"pictureType": "certification",
+			"pictureId": "200f9b8fbc654719bd05f86a17be2baa.jpg"
+		},
+		{
+			"addedDate": 1566250226000,
+			"addedBy": null,
+			"updatedDate": 1566250226000,
+			"updatedBy": null,
+			"employeeId": 227,
+			"pictureType": "certification",
+			"pictureId": "22e53586eb6b4805b84f9cd4abe08fed.jpg"
+		},
+		{
+			"addedDate": 1566250226000,
+			"addedBy": null,
+			"updatedDate": 1566250226000,
+			"updatedBy": null,
+			"employeeId": 227,
+			"pictureType": "certification",
+			"pictureId": "2596911cb4844575ab45e6ef0151e216.png"
+		},
+		{
+			"addedDate": 1566250226000,
+			"addedBy": null,
+			"updatedDate": 1566250226000,
+			"updatedBy": null,
+			"employeeId": 227,
+			"pictureType": "certification",
+			"pictureId": "475a97ac2b70466f8f403b8754e3c830.jpg"
+		},
+		{
+			"addedDate": 1566250226000,
+			"addedBy": null,
+			"updatedDate": 1566250226000,
+			"updatedBy": null,
+			"employeeId": 227,
+			"pictureType": "certification",
+			"pictureId": "cec2ae2e81ae495190bdcc0f614d4158.jpg"
+		},
+		{
+			"addedDate": 1566250226000,
+			"addedBy": null,
+			"updatedDate": 1566250226000,
+			"updatedBy": null,
+			"employeeId": 227,
+			"pictureType": "certification",
+			"pictureId": "fb6fc8d2c542440b844e8399c6b02296.jpg"
+		},
+		{
+			"addedDate": 1566250226000,
+			"addedBy": null,
+			"updatedDate": 1566250226000,
+			"updatedBy": null,
+			"employeeId": 227,
+			"pictureType": "certification",
+			"pictureId": "ff14981496c04458a961e49fe9e17f1a.jpg"
+		}
+	]
+}
